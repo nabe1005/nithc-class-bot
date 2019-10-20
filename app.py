@@ -1,3 +1,4 @@
+import datetime
 import os
 
 from flask import Flask, request, abort
@@ -48,11 +49,23 @@ def index():
     return 'OK'
 
 
-@handler.add(MessageEvent, message=TextMessage)
+def set_send_text():
+    day = {'月', '火', '水', '木', '金', '土', '日'}
+    num_day = datetime.data.today().weekday()
+    return day[num_day]
+
+
 def handle_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.message.text))
+    if event.message.text == '時間割':
+        send_text = set_send_text()
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=send_text))
+    else:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="エラー")
+        )
 
 
 if __name__ == "__main__":
