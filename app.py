@@ -49,6 +49,7 @@ def index():
     return 'OK'
 
 
+@handler.add(MessageEvent, message=TextMessage)
 def set_send_text():
     day = {'月', '火', '水', '木', '金', '土', '日'}
     num_day = datetime.data.today().weekday()
