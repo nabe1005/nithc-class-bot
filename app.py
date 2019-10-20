@@ -42,7 +42,7 @@ def callback():
 
 @app.route('/', methods=['GET'])
 def index():
-    return 'OK'
+    print('OK')
 
 
 @handler.add(MessageEvent, message=TextMessage)
