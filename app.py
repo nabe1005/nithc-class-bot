@@ -64,7 +64,7 @@ def handle_message(event):
     else:
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="エラー")
+            TextSendMessage(text='エラー')
         )
 
 
