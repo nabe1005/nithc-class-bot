@@ -41,9 +41,9 @@ def callback():
     return 'OK'
 
 
-@app.route('/')
+@app.route('/', methods=['POST'])
 def index():
-    return 'Hello World!'
+    return 'OK!'
 
 
 @handler.add(MessageEvent, message=TextMessage)
