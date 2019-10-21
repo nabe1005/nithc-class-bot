@@ -10,8 +10,8 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
-)
+    MessageEvent, TextMessage, TextSendMessage, DatetimePickerTemplateAction,
+    TemplateSendMessage, ButtonsTemplate, PostbackAction, URIAction, MessageAction, ConfirmTemplate)
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -50,23 +50,49 @@ def index():
 
 
 @handler.add(MessageEvent, message=TextMessage)
-def set_send_text():
-    day = {'月', '火', '水', '木', '金', '土', '日'}
-    num_day = datetime.date.today().weekday()
-    return day[num_day]
-
-
 def handle_message(event):
     if event.message.text == '時間割':
-        send_text = set_send_text()
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=send_text))
+            TemplateSendMessage(
+                alt_text='Confirm template',
+                template=ConfirmTemplate(
+                    text='testだよ',
+                    actions=[
+                        MessageAction(
+                            label='Yes',
+                            text='yes'
+                        ),
+                        MessageAction(
+                            label='No',
+                            text='no'
+                        )
+                    ]
+                )
+            )
+        )
+    elif event.message.text == 'yes':
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text='yes')
+        )
+    elif event.message.text == 'no':
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text='no')
+        )
     else:
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text='エラー')
         )
+
+
+def send_text():
+    day = ['月', '火', '水', '木', '金', '土', '日']
+    num_day = datetime.date.today().weekday()
+    return_day = day[num_day]
+    return return_day
 
 
 if __name__ == "__main__":
