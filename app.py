@@ -55,17 +55,17 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TemplateSendMessage(
-                alt_text='Confirm template',
+                alt_text='今日の時間割ですか？',
                 template=ConfirmTemplate(
-                    text='testだよ',
+                    text='今日の時間割ですか？',
                     actions=[
                         MessageAction(
-                            label='Yes',
-                            text='yes'
+                            label='今日',
+                            text='今日'
                         ),
                         MessageAction(
-                            label='No',
-                            text='no'
+                            label='それ以外',
+                            text='それ以外'
                         )
                     ]
                 )
@@ -74,7 +74,7 @@ def handle_message(event):
     elif event.message.text == 'yes':
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text='yes')
+            TextSendMessage(text=send_text())
         )
     elif event.message.text == 'no':
         line_bot_api.reply_message(
