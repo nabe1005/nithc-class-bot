@@ -52,20 +52,26 @@ def index():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text == '時間割':
+
         line_bot_api.reply_message(
             event.reply_token,
             TemplateSendMessage(
                 alt_text='今日の時間割ですか？',
-                template=ConfirmTemplate(
+                template=ButtonsTemplate(
                     text='今日の時間割ですか？',
                     actions=[
-                        MessageAction(
+                        PostbackAction(
                             label='今日',
-                            text='今日'
+                            display_text='今日',
+                            data='today'
                         ),
-                        MessageAction(
-                            label='それ以外',
-                            text='それ以外'
+                        DatetimePickerTemplateAction(
+                            laval='それ以外',
+                            data='other',
+                            mode='date',
+                            initial=datetime.date.today(),
+                            max=(datetime.date.today().year + 1) + '-03-31',
+                            min=datetime.date.today().year + '-01-01'
                         )
                     ]
                 )
@@ -86,13 +92,6 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text='エラー')
         )
-
-
-def send_text():
-    day = ['月', '火', '水', '木', '金', '土', '日']
-    num_day = datetime.date.today().weekday()
-    return_day = day[num_day]
-    return return_day
 
 
 if __name__ == "__main__":
