@@ -1,5 +1,6 @@
 import datetime
 import os
+import json
 
 from flask import Flask, request, abort
 
@@ -10,8 +11,9 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, DatetimePickerTemplateAction,
-    TemplateSendMessage, ButtonsTemplate, PostbackAction, URIAction, MessageAction, ConfirmTemplate)
+    MessageEvent, PostbackEvent, TextMessage, TextSendMessage,
+    TemplateSendMessage, ButtonsTemplate, PostbackAction, URIAction, MessageAction, ConfirmTemplate,
+    DatetimePickerAction)
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -52,46 +54,44 @@ def index():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text == '時間割':
-
         line_bot_api.reply_message(
             event.reply_token,
             TemplateSendMessage(
-                alt_text='今日の時間割ですか？',
+                alt_text='何曜日の時間割ですか？',
                 template=ButtonsTemplate(
-                    text='今日の時間割ですか？',
+                    text='何曜日の時間割ですか？',
                     actions=[
                         PostbackAction(
-                            label='今日',
-                            display_text='今日',
-                            data='today'
+                            label='月曜日',
+                            data='Mon',
+                            display_text='月曜日'
                         ),
-                        DatetimePickerTemplateAction(
-                            laval='それ以外',
-                            data='other',
-                            mode='date',
-                            initial=str(datetime.date.today()),
-                            max=str(datetime.date.today().year + 1) + '-03-31',
-                            min=str(datetime.date.today().year) + '-01-01'
+                        PostbackAction(
+                            label='火曜日',
+                            data='Tue',
+                            display_text='火曜日'
                         )
                     ]
                 )
             )
-        )
-    elif event.message.text == 'yes':
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=send_text())
-        )
-    elif event.message.text == 'no':
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text='no')
         )
     else:
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text='エラー')
         )
+
+
+@handler.add(PostbackEvent)
+def handle_postback(event):
+    f = open('json/kairoele.json')
+    jsn = json.load(f)
+    f.close()
+    timetable = json.dumps(jsn[str(event.postback.data)], sort_keys=True, indent=4)
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=str(timetable))
+    )
 
 
 if __name__ == "__main__":
