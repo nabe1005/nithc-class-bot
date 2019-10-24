@@ -69,9 +69,9 @@ def handle_message(event):
                             laval='それ以外',
                             data='other',
                             mode='date',
-                            initial=datetime.date.today(),
-                            max=(datetime.date.today().year + 1) + '-03-31',
-                            min=datetime.date.today().year + '-01-01'
+                            initial=str(datetime.date.today()),
+                            max=str(datetime.date.today().year + 1) + '-03-31',
+                            min=str(datetime.date.today().year) + '-01-01'
                         )
                     ]
                 )
