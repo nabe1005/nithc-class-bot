@@ -13,7 +13,7 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, PostbackEvent, TextMessage, TextSendMessage,
     TemplateSendMessage, ButtonsTemplate, PostbackAction, URIAction, MessageAction, ConfirmTemplate,
-    DatetimePickerAction)
+    DatetimePickerAction, QuickReply, QuickReplyButton)
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -56,23 +56,12 @@ def handle_message(event):
     if event.message.text == '時間割':
         line_bot_api.reply_message(
             event.reply_token,
-            TemplateSendMessage(
-                alt_text='何曜日の時間割ですか？',
-                template=ButtonsTemplate(
-                    text='何曜日の時間割ですか？',
-                    actions=[
-                        PostbackAction(
-                            label='月曜日',
-                            data='Mon',
-                            display_text='月曜日'
-                        ),
-                        PostbackAction(
-                            label='火曜日',
-                            data='Tue',
-                            display_text='火曜日'
-                        )
-                    ]
-                )
+            TextSendMessage(
+                text='何曜日の時間割ですか？',
+                quick_reply=QuickReply(items=[
+                    QuickReplyButton(action=PostbackAction(label='月', data='Mon', display_text='月曜日')),
+                    QuickReplyButton(action=PostbackAction(label='火', data='Tue', display_text='火曜日')),
+                ])
             )
         )
     else:
