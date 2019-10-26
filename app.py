@@ -1,6 +1,7 @@
-import datetime
 import os
-import json
+import affiliation
+import richmenu
+import timetable
 
 
 from flask import Flask, request, abort
@@ -54,48 +55,27 @@ def index():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    if event.message.text == '時間割':
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=event.source.userId),
-            TextSendMessage(
-                text='何曜日の時間割ですか？',
-                quick_reply=QuickReply(items=[
-                    QuickReplyButton(action=PostbackAction(label='月', data='Mon', display_text='月曜日')),
-                    QuickReplyButton(action=PostbackAction(label='火', data='Tue', display_text='火曜日')),
-                    QuickReplyButton(action=PostbackAction(label='水', data='Wed', display_text='水曜日')),
-                    QuickReplyButton(action=PostbackAction(label='木', data='Thu', display_text='木曜日')),
-                    QuickReplyButton(action=PostbackAction(label='金', data='Fri', display_text='金曜日'))
-                ])
-            )
-        )
-    else:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text='エラー')
-        )
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=event.message.text)
+    )
 
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=get_timetable(event.postback.data), wrap=True)
-    )
-
-
-def get_timetable(day):
-    f = open('json/ele.json')
-    jsn = json.load(f)
-    f.close()
-    text = ''
-    count = 1
-    for subject in jsn[str(day)].items():
-        text += '【' + subject[0] + '時間目】\n' + subject[1] + '\n'
-        if count == len(jsn[str(day)]):
-            text += '\n' + subject[0][-1] + '時間授業です。'
-        count += 1
-    return text
+    if event.postback.data == 'affiliation':
+        line_bot_api.reply_message(event.reply_token, affiliation.get_grade)
+    elif event.postback.data.startswith('grade='):
+        affiliation.set_grade(event.postback.data)
+        line_bot_api.reply_message(event.reply_token, affiliation.get_course())
+    elif event.postback.data.startswith('course='):
+        affiliation.set_course(event.postback.data, event.source.user_id)
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(event.postback.data)))
+    elif event.postback.data in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=timetable.get_timetable(event.postback.data)))
+    else:
+        richmenu.unlink(event.source.user_id)
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(event.postback.data)))
 
 
 if __name__ == "__main__":
