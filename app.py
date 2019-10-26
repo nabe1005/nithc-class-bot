@@ -92,7 +92,7 @@ def get_timetable(day):
     for subject in jsn[str(day)].items():
         text += subject[0] + '時間目 ' + subject[1] + '\n'
         if count == len(jsn[str(day)]):
-            text += '\n' + str(count) + '時間授業です。'
+            text += '\n' + str(count)[-1] + '時間授業です。'
         count += 1
     return text
 
