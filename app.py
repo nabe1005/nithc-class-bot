@@ -2,6 +2,7 @@ import datetime
 import os
 import json
 
+
 from flask import Flask, request, abort
 
 from linebot import (
@@ -78,7 +79,7 @@ def handle_message(event):
 def handle_postback(event):
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=get_timetable(event.postback.data))
+        TextSendMessage(text=get_timetable(event.postback.data), wrap=True)
     )
 
 
@@ -88,8 +89,10 @@ def get_timetable(day):
     f.close()
     text = ''
     count = 1
-    for subject in jsn.values():
-        text += str(count) + '時間目ー' + subject[str(count)] + '¥n'
+    for subject in jsn[str(day)].items():
+        text += subject[0] + '時間目 ' + subject[1] + '\n'
+        if count == len(jsn[str(day)]):
+            text += '\n' + str(count) + '時間授業です。'
         count += 1
     return text
 
