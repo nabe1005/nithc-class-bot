@@ -76,14 +76,22 @@ def handle_message(event):
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
-    f = open('json/kairoele.json')
-    jsn = json.load(f)
-    f.close()
-    timetable = json.dumps(jsn[str(event.postback.data)], sort_keys=True, indent=4)
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=str(timetable))
+        TextSendMessage(text=get_timetable(event.postback.data))
     )
+
+
+def get_timetable(day):
+    f = open('json/ele.json')
+    jsn = json.load(f)
+    f.close()
+    text = ''
+    count = 1
+    for subject in jsn.values():
+        text += str(count) + '時間目ー' + subject[str(count)] + '¥n'
+        count += 1
+    return text
 
 
 if __name__ == "__main__":
