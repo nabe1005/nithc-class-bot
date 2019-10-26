@@ -62,9 +62,9 @@ def handle_message(event):
                 quick_reply=QuickReply(items=[
                     QuickReplyButton(action=PostbackAction(label='月', data='Mon', display_text='月曜日')),
                     QuickReplyButton(action=PostbackAction(label='火', data='Tue', display_text='火曜日')),
-                    QuickReplyButton(action=PostbackAction(label='水', data='Tue', display_text='水曜日')),
-                    QuickReplyButton(action=PostbackAction(label='木', data='Tue', display_text='木曜日')),
-                    QuickReplyButton(action=PostbackAction(label='金', data='Tue', display_text='金曜日'))
+                    QuickReplyButton(action=PostbackAction(label='水', data='Wed', display_text='水曜日')),
+                    QuickReplyButton(action=PostbackAction(label='木', data='Thu', display_text='木曜日')),
+                    QuickReplyButton(action=PostbackAction(label='金', data='Fri', display_text='金曜日'))
                 ])
             )
         )
