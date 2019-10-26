@@ -57,6 +57,7 @@ def handle_message(event):
     if event.message.text == '時間割':
         line_bot_api.reply_message(
             event.reply_token,
+            TextSendMessage(text=event.source.userId),
             TextSendMessage(
                 text='何曜日の時間割ですか？',
                 quick_reply=QuickReply(items=[
@@ -67,10 +68,6 @@ def handle_message(event):
                     QuickReplyButton(action=PostbackAction(label='金', data='Fri', display_text='金曜日'))
                 ])
             )
-        )
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=event.source.userId)
         )
     else:
         line_bot_api.reply_message(
