@@ -15,7 +15,7 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, PostbackEvent, TextMessage, TextSendMessage,
     TemplateSendMessage, ButtonsTemplate, PostbackAction, URIAction, MessageAction, ConfirmTemplate,
-    DatetimePickerAction, QuickReply, QuickReplyButton)
+    DatetimePickerAction, QuickReply, QuickReplyButton, FollowEvent)
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -55,6 +55,7 @@ def index():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    richmenu.unlink(event.source.user_id)
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=event.message.text)
@@ -70,12 +71,18 @@ def handle_postback(event):
         line_bot_api.reply_message(event.reply_token, affiliation.get_course())
     elif event.postback.data.startswith('course='):
         affiliation.set_course(event.postback.data, event.source.user_id)
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(event.postback.data)))
-    elif event.postback.data in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']:
+        if event.postback.data.endswith('5'):
+            line_bot_api.reply_message(event.reply_token, affiliation.confirm_gm(event.postback.data))
+        else:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(event.postback.data)))
+    elif event.postback.data.endswith(('Mon', 'Tue', 'Wed'))\
+            or event.postback.data.endswith(('Thu', 'Fri')):
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=timetable.get_timetable(event.postback.data)))
-    else:
-        richmenu.unlink(event.source.user_id)
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(event.postback.data)))
+
+
+@handler.add(FollowEvent)
+def handle_follow(event):
+    richmenu.unlink(str(event.source.user_id))
 
 
 if __name__ == "__main__":
