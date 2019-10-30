@@ -94,6 +94,9 @@ def set_course(postback, user):
     global course
     course = postback[7:]
     if not postback.endswith('4its') or not postback.startswith('5'):
-        richmenu.link_timetable_menu(grade, course, user)
-        return True
+        r = richmenu.link_timetable_menu(grade, course, user)
+        if r:
+            return True
+        else:
+            return False
     return False
