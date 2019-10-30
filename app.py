@@ -70,13 +70,11 @@ def handle_postback(event):
         affiliation.set_grade(event.postback.data)
         line_bot_api.reply_message(event.reply_token, affiliation.get_course())
     elif event.postback.data.startswith('course='):
-        r = affiliation.set_course(event.postback.data, event.source.user_id)
-        if not r and event.postback.data.endswith('5'):
+        affiliation.set_course(event.postback.data, event.source.user_id)
+        if event.postback.data.endswith('5'):
             line_bot_api.reply_message(event.reply_token, affiliation.confirm_gm(event.postback.data))
-        elif r:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(event.postback.data)))
         else:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text='error'))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(event.postback.data)))
     elif event.postback.data.endswith(('Mon', 'Tue', 'Wed'))\
             or event.postback.data.endswith(('Thu', 'Fri')):
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=timetable.get_timetable(event.postback.data)))

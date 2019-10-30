@@ -100,9 +100,9 @@ def link_timetable_menu(grade, course, user):
     menu_list = line_bot_api.get_rich_menu_list()
     for menu in menu_list:
         if menu.name != 'timetable' + grade + course:
-            return False
+            continue
         line_bot_api.link_rich_menu_to_user(user_id=user, rich_menu_id=menu.rich_menu_id)
-        return True
+        break
 
 
 
