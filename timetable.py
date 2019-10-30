@@ -6,9 +6,10 @@ def get_timetable(postback):
     f = open(file_path)
     jsn = json.load(f)
     f.close()
-    text = ''
     count = 1
+    day_list = {'Mon': '月曜日', 'Tue': '火曜日', 'Wed': '水曜日', 'Thu': '木曜日', 'Fri': '金曜日'}
     day = postback[-3:]
+    text = day_list[day] + 'の時間割です。\n\n'
     for subject in jsn[day].items():
         text += '【' + subject[0] + '時間目】\n' + subject[1] + '\n\n'
         if count == len(jsn[day]):
