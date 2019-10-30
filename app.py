@@ -74,7 +74,7 @@ def handle_postback(event):
         if event.postback.data.endswith('5'):
             line_bot_api.reply_message(event.reply_token, affiliation.confirm_gm(event.postback.data))
         else:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(event.postback.data)))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(affiliation.grade + affiliation.course)))
     elif event.postback.data.endswith(('Mon', 'Tue', 'Wed'))\
             or event.postback.data.endswith(('Thu', 'Fri')):
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=timetable.get_timetable(event.postback.data)))
