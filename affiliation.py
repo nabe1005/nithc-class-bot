@@ -65,7 +65,7 @@ def get_course():
                 QuickReplyButton(action=PostbackAction(label='材料物性', data='course=mat', display_text='材料物性')),
                 QuickReplyButton(action=PostbackAction(label='バイオ環境', data='course=bio', display_text='バイオ環境')),
                 QuickReplyButton(action=PostbackAction(label='都市デザイン', data='course=city', display_text='都市デザイン')),
-                QuickReplyButton(action=PostbackAction(label='建築設計', data='course=con', display_text='建築設計'))
+                QuickReplyButton(action=PostbackAction(label='建設設計', data='course=con', display_text='建設設計'))
             ])
         )
     else:
@@ -80,7 +80,7 @@ def get_course():
                 QuickReplyButton(action=PostbackAction(label='材料物性', data='course=mat5', display_text='材料物性')),
                 QuickReplyButton(action=PostbackAction(label='バイオ環境', data='course=bio5', display_text='バイオ環境')),
                 QuickReplyButton(action=PostbackAction(label='都市デザイン', data='course=city5', display_text='都市デザイン')),
-                QuickReplyButton(action=PostbackAction(label='建築設計', data='course=con5', display_text='建築設計'))
+                QuickReplyButton(action=PostbackAction(label='建設設計', data='course=con5', display_text='建設設計'))
             ])
         )
 
