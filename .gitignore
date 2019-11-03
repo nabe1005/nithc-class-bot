@@ -1,5 +1,7 @@
 /static/
 /venv/
 /templates/
+/.idea/
+/__pycache__/
 .env
 sample.py
