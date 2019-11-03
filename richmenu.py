@@ -103,6 +103,3 @@ def link_timetable_menu(grade, course, user):
             continue
         line_bot_api.link_rich_menu_to_user(user_id=user, rich_menu_id=menu.rich_menu_id)
         break
-
-
-

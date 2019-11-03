@@ -13,9 +13,8 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, PostbackEvent, TextMessage, TextSendMessage,
-    TemplateSendMessage, ButtonsTemplate, PostbackAction, URIAction, MessageAction, ConfirmTemplate,
-    DatetimePickerAction, QuickReply, QuickReplyButton, FollowEvent)
+    MessageEvent, PostbackEvent, TextMessage, TextSendMessage, FollowEvent
+)
 from dotenv import load_dotenv
 
 app = Flask(__name__)
@@ -61,7 +60,7 @@ def handle_message(event):
         TextSendMessage(text=event.message.text)
     )
 
-
+# todo 授業変更に対応する。
 @handler.add(PostbackEvent)
 def handle_postback(event):
     if event.postback.data == 'affiliation':
@@ -74,10 +73,12 @@ def handle_postback(event):
         if event.postback.data.endswith('5'):
             line_bot_api.reply_message(event.reply_token, affiliation.confirm_gm(event.postback.data))
         else:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(affiliation.grade + affiliation.course)))
+            line_bot_api.reply_message(event.reply_token,
+                                       TextSendMessage(text=str(affiliation.grade + affiliation.course)))
     elif event.postback.data.endswith(('Mon', 'Tue', 'Wed'))\
             or event.postback.data.endswith(('Thu', 'Fri')):
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=timetable.get_timetable(event.postback.data)))
+        line_bot_api.reply_message(event.reply_token,
+                                   TextSendMessage(text=timetable.get_timetable(event.postback.data)))
 
 
 @handler.add(FollowEvent)
