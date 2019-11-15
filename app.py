@@ -70,8 +70,8 @@ def handle_postback(event):
         line_bot_api.reply_message(event.reply_token, affiliation.get_course())
     elif event.postback.data.startswith('course='):
         affiliation.set_course(event.postback.data, event.source.user_id)
-        if (affiliation.grade == '5' and not affiliation.course.endswith('gm')) \
-                or (affiliation.grade == '4' and affiliation.course == 'its') and affiliation.gm_flag == 0:
+        if (affiliation.grade == '5' and not affiliation.course.endswith('gm') and affiliation.gm_flag == 0) \
+                or (affiliation.grade == '4' and affiliation.course == 'its' and affiliation.gm_flag == 0):
             line_bot_api.reply_message(event.reply_token, affiliation.confirm_gm(event.postback.data))
         else:
             line_bot_api.reply_message(event.reply_token,
