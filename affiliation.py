@@ -22,10 +22,10 @@ def confirm_gm(postback):
         quick_reply=QuickReply(items=[
             QuickReplyButton(action=PostbackAction(
                 label='はい',
-                data=str(postback[:-1] + 'gm'),
+                data=str(postback + 'gm'),
                 display_text='はい')
             ),
-            QuickReplyButton(action=PostbackAction(label='いいえ', data=str(postback[:-1]), display_text='いいえ'))
+            QuickReplyButton(action=PostbackAction(label='いいえ', data=str(postback), display_text='いいえ'))
         ])
     )
 
@@ -53,34 +53,19 @@ def get_course():
                 QuickReplyButton(action=PostbackAction(label='社基', data='course=z', display_text='社会基盤')),
             ])
         )
-    elif grade == '4':
+    else:
         return TextSendMessage(
             text='履修コースを選択してください',
             quick_reply=QuickReply(items=[
                 QuickReplyButton(action=PostbackAction(label='設計加工', data='course=des', display_text='設計加工')),
                 QuickReplyButton(action=PostbackAction(label='エネルギー', data='course=ene', display_text='エネルギー')),
                 QuickReplyButton(action=PostbackAction(label='回路エレ', data='course=ele', display_text='回路エレクトロニクス')),
-                QuickReplyButton(action=PostbackAction(label='ITS', data='course=its5', display_text='ITS')),
+                QuickReplyButton(action=PostbackAction(label='ITS', data='course=its', display_text='ITS')),
                 QuickReplyButton(action=PostbackAction(label='ロボティクス', data='course=rob', display_text='ロボティクス')),
                 QuickReplyButton(action=PostbackAction(label='材料物性', data='course=mat', display_text='材料物性')),
                 QuickReplyButton(action=PostbackAction(label='バイオ環境', data='course=bio', display_text='バイオ環境')),
                 QuickReplyButton(action=PostbackAction(label='都市デザイン', data='course=city', display_text='都市デザイン')),
                 QuickReplyButton(action=PostbackAction(label='建設設計', data='course=con', display_text='建設設計'))
-            ])
-        )
-    else:
-        return TextSendMessage(
-            text='履修コースを選択してください',
-            quick_reply=QuickReply(items=[
-                QuickReplyButton(action=PostbackAction(label='設計加工', data='course=des5', display_text='設計加工')),
-                QuickReplyButton(action=PostbackAction(label='エネルギー', data='course=ene5', display_text='エネルギー')),
-                QuickReplyButton(action=PostbackAction(label='回路エレ', data='course=ele5', display_text='回路エレクトロニクス')),
-                QuickReplyButton(action=PostbackAction(label='ITS', data='course=its5', display_text='ITS')),
-                QuickReplyButton(action=PostbackAction(label='ロボティクス', data='course=rob5', display_text='ロボティクス')),
-                QuickReplyButton(action=PostbackAction(label='材料物性', data='course=mat5', display_text='材料物性')),
-                QuickReplyButton(action=PostbackAction(label='バイオ環境', data='course=bio5', display_text='バイオ環境')),
-                QuickReplyButton(action=PostbackAction(label='都市デザイン', data='course=city5', display_text='都市デザイン')),
-                QuickReplyButton(action=PostbackAction(label='建設設計', data='course=con5', display_text='建設設計'))
             ])
         )
 
@@ -93,5 +78,5 @@ def set_grade(data):
 def set_course(postback, user):
     global course
     course = postback[7:]
-    if not postback.endswith('4its') or not postback.startswith('5'):
+    if (grade == '4' and course != 'its') or grade != '5':
         richmenu.link_timetable_menu(grade, course, user)
