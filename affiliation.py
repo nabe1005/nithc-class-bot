@@ -3,6 +3,7 @@ from linebot.models import TextSendMessage, QuickReply, QuickReplyButton, Postba
 
 grade = ''
 course = ''
+gm_flag = 0
 
 get_grade = TextSendMessage(
     text='学年を選択してください。',
@@ -17,6 +18,8 @@ get_grade = TextSendMessage(
 
 
 def confirm_gm(postback):
+    global gm_flag
+    gm_flag = 1
     return TextSendMessage(
         text='GM履修コースですか？',
         quick_reply=QuickReply(items=[
@@ -76,7 +79,8 @@ def set_grade(data):
 
 
 def set_course(postback, user):
-    global course
+    global course, gm_flag
     course = postback[7:]
-    if (grade == '4' and course != 'its') or grade != '5':
+    if (grade == '4' and (course != 'its' or gm_flag == 1)) or grade != '4' or grade != '5':
         richmenu.link_timetable_menu(grade, course, user)
+        gm_flag = 0
