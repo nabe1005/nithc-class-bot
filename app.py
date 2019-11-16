@@ -71,6 +71,7 @@ def handle_postback(event):
     elif event.postback.data.startswith('course='):
         if (affiliation.grade == '4' and event.postback.data.endswith('its')) or affiliation.grade == '5':
             if affiliation.gm_flag == 0:
+                affiliation.gm_flag = 1
                 line_bot_api.reply_message(event.reply_token, affiliation.confirm_gm(event.postback.data))
             else:
                 affiliation.set_course(event.postback.data, event.source.user_id)

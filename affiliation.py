@@ -19,7 +19,6 @@ get_grade = TextSendMessage(
 
 def confirm_gm(postback):
     global gm_flag
-    gm_flag = 1
     return TextSendMessage(
         text='GM履修コースですか？',
         quick_reply=QuickReply(items=[
