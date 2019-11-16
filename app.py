@@ -69,8 +69,13 @@ def handle_postback(event):
         affiliation.set_grade(event.postback.data)
         line_bot_api.reply_message(event.reply_token, affiliation.get_course())
     elif event.postback.data.startswith('course='):
-        if affiliation.grade in ['4', '5'] and affiliation.gm_flag == 0:
-            line_bot_api.reply_message(event.reply_token, affiliation.confirm_gm(event.postback.data))
+        if (affiliation.grade == '4' and event.postback.data.endswith('its')) or affiliation.grade == 5:
+            if affiliation.gm_flag == 0:
+                line_bot_api.reply_message(event.reply_token, affiliation.confirm_gm(event.postback.data))
+            else:
+                affiliation.set_course(event.postback.data, event.source.user_id)
+                line_bot_api.reply_message(event.reply_token,
+                                           TextSendMessage(text=str(affiliation.grade + affiliation.course)))
         else:
             affiliation.set_course(event.postback.data, event.source.user_id)
             line_bot_api.reply_message(event.reply_token,

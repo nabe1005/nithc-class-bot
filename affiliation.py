@@ -25,10 +25,10 @@ def confirm_gm(postback):
         quick_reply=QuickReply(items=[
             QuickReplyButton(action=PostbackAction(
                 label='はい',
-                data=str(postback)[7:] + 'gm',
+                data=str(postback) + 'gm',
                 display_text='はい')
             ),
-            QuickReplyButton(action=PostbackAction(label='いいえ', data=str(postback)[7:], display_text='いいえ'))
+            QuickReplyButton(action=PostbackAction(label='いいえ', data=str(postback), display_text='いいえ'))
         ])
     )
 
