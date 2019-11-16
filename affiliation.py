@@ -25,10 +25,10 @@ def confirm_gm(postback):
         quick_reply=QuickReply(items=[
             QuickReplyButton(action=PostbackAction(
                 label='はい',
-                data=str(postback + 'gm'),
+                data=str(postback)[7:] + 'gm',
                 display_text='はい')
             ),
-            QuickReplyButton(action=PostbackAction(label='いいえ', data=str(postback), display_text='いいえ'))
+            QuickReplyButton(action=PostbackAction(label='いいえ', data=str(postback)[7:], display_text='いいえ'))
         ])
     )
 
@@ -80,8 +80,6 @@ def set_grade(data):
 
 def set_course(postback, user):
     global course, gm_flag
+    gm_flag = 0
     course = postback[7:]
-    if (grade == '4' and (course != 'its' or gm_flag == 1)) or (grade == '5' and gm_flag == 1) \
-            or grade != '4' or grade != '5':
-        richmenu.link_timetable_menu(grade, course, user)
-        gm_flag = 0
+    richmenu.link_timetable_menu(grade, course, user)
