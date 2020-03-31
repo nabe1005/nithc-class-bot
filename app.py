@@ -102,16 +102,15 @@ def handle_postback(event):
         if event.postback.data.endswith('its'):
             if affiliation.gm_flag == 0:
                 affiliation.gm_flag = 1
-                time.sleep(1)
                 line_bot_api.reply_message(event.reply_token, affiliation.confirm_gm(event.postback.data))
             else:
-                affiliation.set_course(event.postback.data, event.source.user_id)
-                time.sleep(1)
+                affiliation.gm_flag = 0
+                affiliation.course = event.postback.data[7:]
+                richmenu.link_timetable_menu(affiliation.grade, affiliation.course, event.source.user_id)
                 line_bot_api.reply_message(event.reply_token,
                                            TextSendMessage(text=str(affiliation.grade + affiliation.course)))
         else:
-            affiliation.set_course(event.postback.data, event.source.user_id)
-            time.sleep(1)
+            richmenu.link_timetable_menu(affiliation.grade, affiliation.course, event.source.user_id)
             line_bot_api.reply_message(event.reply_token,
                                        TextSendMessage(text=str(affiliation.grade + affiliation.course)))
     elif event.postback.data.endswith(('Mon', 'Tue', 'Wed'))\
