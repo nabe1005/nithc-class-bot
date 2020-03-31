@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>時間割登録</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+</head>
+<body>
+<section class="section">
+    <div class="container">
+        <h1 class="title">時間割　登録フォーム</h1>
+
+        <form action="/register" method="post" enctype="multipart/form-data">
+
+            <div class="field">
+                <label class="label">学年</label>
+                <div class="control">
+                    <div class="select">
+                        <select name="grade">
+                            {% for i in range(1,6) %}
+                                <option value="{{ i }}">{{ i }}年生</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">クラス・学科・履修コース</label>
+                <div class="control">
+                    <div class="select">
+                        <select name="class">
+                            {% for value, label in classes.items() %}
+                                <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            {% set day_list={'Mon':'月曜日', 'Tue':'火曜日', 'Wed':'水曜日', 'Thu':'木曜日', 'Fri':'金曜日'} %}
+            {% for label, day in day_list.items() %}
+                <label class="label">【{{ day }}】</label>
+                {% set time={'1':'9:00~10:30', '2':'10:45~12:15', '3':'13:05~14:35', '4':'14:40~16:10', '5':'16:15~17:45'} %}
+                {% for key, value in time.items() %}
+                    <div class="field">
+                        <label class="label">{{ key }}限目({{ value }})</label>
+                        <div class="control">
+                            <input type="text" autocomplete="on" list="subjects" class="input" name="{{ label }}{{ key }}" placeholder="{{ label }}{{ key }}">
+                            <datalist id="subjects">
+                                {% for subject in subjects %}
+                                    <option>{{ subject }}</option>
+                                {% endfor %}
+                            </datalist>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <div class="field">
+                <div class="control">
+                    <button class="button is-link">送信</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>
