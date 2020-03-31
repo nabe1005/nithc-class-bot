@@ -110,6 +110,7 @@ def handle_postback(event):
                 line_bot_api.reply_message(event.reply_token,
                                            TextSendMessage(text=str(affiliation.grade + affiliation.course)))
         else:
+            affiliation.course = event.postback.data[7:]
             richmenu.link_timetable_menu(affiliation.grade, affiliation.course, event.source.user_id)
             line_bot_api.reply_message(event.reply_token,
                                        TextSendMessage(text=str(affiliation.grade + affiliation.course)))
