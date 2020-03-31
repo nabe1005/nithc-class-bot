@@ -1,0 +1,28 @@
+{
+  "Mon": {
+    "1": "CAD/CAM/CAEⅡ",
+    "2": "コミュ英語Ⅱ",
+    "3": "コンピュータアーキテクチャー"
+  },
+  "Tue": {
+    "1": "コンクリート工学",
+    "3": "コンクリート構造学Ⅱ"
+  },
+  "Wed": {
+    "1": "Global English Ⅱ\\n補講・自学自習",
+    "2": "Global English Ⅱ\\n補講・自学自習",
+    "3": "Global English Ⅱ\\n補講・自学自習"
+  },
+  "Thu": {
+    "1": "Global English Ⅱ\\n補講・自学自習",
+    "2": "Global English Ⅱ\\n補講・自学自習",
+    "3": "Global English Ⅱ\\n補講・自学自習",
+    "4": "Global English Ⅱ\\n補講・自学自習",
+    "5": "Global English Ⅱ\\n補講・自学自習"
+  },
+  "Fri": {
+    "3": "Global English Ⅱ\\n補講・自学自習",
+    "4": "Global English Ⅱ\\n補講・自学自習",
+    "5": "応用数学特講\\nEngineering English Ⅱ"
+  }
+}

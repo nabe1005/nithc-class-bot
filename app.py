@@ -1,10 +1,13 @@
+import codecs
 import os
+import re
+
 import affiliation
 import richmenu
 import timetable
 
 
-from flask import Flask, request, abort
+from flask import *
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -16,6 +19,7 @@ from linebot.models import (
     MessageEvent, PostbackEvent, TextMessage, TextSendMessage, FollowEvent
 )
 from dotenv import load_dotenv
+import json
 
 app = Flask(__name__)
 app.debug = False
@@ -48,8 +52,33 @@ def callback():
 
 
 @app.route('/', methods=['GET'])
-def index():
+def top():
     return 'OK'
+
+
+@app.route('/register', methods=['GET'])
+def form_timetable():
+    f = open('json/class.json')
+    jsn = json.load(f)
+    f.close()
+    f = open('subjects.txt')
+    subjects = f.readlines()
+    f.close()
+    return render_template('register_timetable.html', classes=jsn, subjects=subjects)
+
+
+@app.route('/register', methods=['POST'])
+def register_timetable():
+    day_list = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+    sub = {'Mon': {}, 'Tue': {}, 'Wed': {}, 'Thu': {}, 'Fri': {}}
+    for day in day_list:
+        for i in range(1, 6):
+            if request.form.get(day + str(i)):
+                sub[day][i] = request.form.get(day + str(i)).replace('|', '\\')
+    file_path = 'json/' + request.form.get('grade') + '/' + request.form.get('class') + '.json'
+    with codecs.open(file_path, 'w', 'utf-8') as f:
+        json.dump(sub, f, indent=2, ensure_ascii=False)
+    return sub
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -69,7 +98,7 @@ def handle_postback(event):
         affiliation.set_grade(event.postback.data)
         line_bot_api.reply_message(event.reply_token, affiliation.get_course())
     elif event.postback.data.startswith('course='):
-        if (affiliation.grade == '4' and event.postback.data.endswith('its')) or affiliation.grade == '5':
+        if event.postback.data.endswith('its'):
             if affiliation.gm_flag == 0:
                 affiliation.gm_flag = 1
                 line_bot_api.reply_message(event.reply_token, affiliation.confirm_gm(event.postback.data))

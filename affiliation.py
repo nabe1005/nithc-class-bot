@@ -24,7 +24,7 @@ def confirm_gm(postback):
         quick_reply=QuickReply(items=[
             QuickReplyButton(action=PostbackAction(
                 label='はい',
-                data=str(postback) + 'gm',
+                data='gm',
                 display_text='はい')
             ),
             QuickReplyButton(action=PostbackAction(label='いいえ', data=str(postback), display_text='いいえ'))
@@ -44,7 +44,7 @@ def get_course():
                 QuickReplyButton(action=PostbackAction(label='5', data='course=5', display_text='5組'))
             ])
         )
-    elif grade in ['2', '3']:
+    elif grade in ['2', '3', '4']:
         return TextSendMessage(
             text='学科を選択してください',
             quick_reply=QuickReply(items=[
