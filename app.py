@@ -1,6 +1,7 @@
 import codecs
 import os
 import re
+import time
 
 import affiliation
 import richmenu
@@ -96,18 +97,22 @@ def handle_postback(event):
         line_bot_api.reply_message(event.reply_token, affiliation.get_grade)
     elif event.postback.data.startswith('grade='):
         affiliation.set_grade(event.postback.data)
+        time.sleep(1)
         line_bot_api.reply_message(event.reply_token, affiliation.get_course())
     elif event.postback.data.startswith('course='):
         if event.postback.data.endswith('its'):
             if affiliation.gm_flag == 0:
                 affiliation.gm_flag = 1
+                time.sleep(1)
                 line_bot_api.reply_message(event.reply_token, affiliation.confirm_gm(event.postback.data))
             else:
                 affiliation.set_course(event.postback.data, event.source.user_id)
+                time.sleep(1)
                 line_bot_api.reply_message(event.reply_token,
                                            TextSendMessage(text=str(affiliation.grade + affiliation.course)))
         else:
             affiliation.set_course(event.postback.data, event.source.user_id)
+            time.sleep(1)
             line_bot_api.reply_message(event.reply_token,
                                        TextSendMessage(text=str(affiliation.grade + affiliation.course)))
     elif event.postback.data.endswith(('Mon', 'Tue', 'Wed'))\
