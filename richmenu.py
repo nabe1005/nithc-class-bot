@@ -43,13 +43,9 @@ def create_timetable_menu():
         '11', '12', '13', '14', '15',
         '2m', '2e', '2j', '2c', '2z',
         '3m', '3e', '3j', '3c', '3z',
-        '4des', '4ene', '4ele', '4rob', '4its',
-        '4mat', '4bio', '4city', '4con',
+        '4m', '4e', '4j', '4c', '4z',
         '5des', '5ene', '5ele', '5rob', '5its',
-        '5mat', '5bio', '5city', '5con',
-        '4itsgm',
-        '5desgm', '5enegm', '5elegm', '5robgm', '5itsgm',
-        '5matgm', '5biogm', '5citygm', '5congm',
+        '5mat', '5bio', '5city', '5con','5gm',
     }
 
     for affiliation in affiliations:

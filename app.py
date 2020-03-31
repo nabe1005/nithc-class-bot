@@ -75,7 +75,7 @@ def register_timetable():
     for day in day_list:
         for i in range(1, 6):
             if request.form.get(day + str(i)):
-                sub[day][i] = request.form.get(day + str(i)).replace('|', '\\')
+                sub[day][i] = request.form.get(day + str(i)).replace('|', '\n')
     file_path = 'json/' + request.form.get('grade') + '/' + request.form.get('class') + '.json'
     with codecs.open(file_path, 'w', 'utf-8') as f:
         json.dump(sub, f, indent=2, ensure_ascii=False)
@@ -96,8 +96,7 @@ def handle_postback(event):
     if event.postback.data == 'affiliation':
         line_bot_api.reply_message(event.reply_token, affiliation.get_grade)
     elif event.postback.data.startswith('grade='):
-        affiliation.set_grade(event.postback.data)
-        time.sleep(1)
+        affiliation.grade = event.postback.data[-1]
         line_bot_api.reply_message(event.reply_token, affiliation.get_course())
     elif event.postback.data.startswith('course='):
         if event.postback.data.endswith('its'):
