@@ -3,6 +3,7 @@
     <words>
       <w>biogm</w>
       <w>citygm</w>
+      <w>classbot</w>
       <w>congm</w>
       <w>desgm</w>
       <w>elegm</w>
@@ -11,7 +12,10 @@
       <w>matgm</w>
       <w>nithc</w>
       <w>postback</w>
+      <w>postgresql</w>
       <w>robgm</w>
+      <w>sqlalchemy</w>
+      <w>tablename</w>
       <w>webhook</w>
     </words>
   </dictionary>

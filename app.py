@@ -1,12 +1,10 @@
 import codecs
 import os
-import re
-import time
+import sqlite3
 
 import affiliation
 import richmenu
 import timetable
-
 
 from flask import *
 
@@ -20,6 +18,7 @@ from linebot.models import (
     MessageEvent, PostbackEvent, TextMessage, TextSendMessage, FollowEvent
 )
 from dotenv import load_dotenv
+from flask_sqlalchemy import SQLAlchemy
 import json
 
 app = Flask(__name__)
@@ -31,6 +30,20 @@ channel_secret = os.environ['LINE_CHANNEL_SECRET']
 
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
+
+db_uri = os.environ.get('DATABASE_URL') or "postgresql://localhost/classbot"
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+db = SQLAlchemy(app)
+
+
+class Timetable(db.Model):
+    __tablename__ = "timetables"
+    id = db.Column(db.Integer, primary_key=True)
+    grade = db.Column(db.Integer, nullable=False)
+    course = db.Column(db.String(), nullable=False)
+    day = db.Column(db.String(), nullable=False)
+    time = db.Column(db.Integer, nullable=False)
+    subject = db.Column(db.String(), nullable=False)
 
 
 @app.route("/callback", methods=['POST'])
@@ -54,7 +67,8 @@ def callback():
 
 @app.route('/', methods=['GET'])
 def top():
-    return 'OK'
+    timetables = Timetable.query.all()
+    return render_template('index.html', timetables=timetables)
 
 
 @app.route('/register', methods=['GET'])
@@ -71,15 +85,29 @@ def form_timetable():
 @app.route('/register', methods=['POST'])
 def register_timetable():
     day_list = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
-    sub = {'Mon': {}, 'Tue': {}, 'Wed': {}, 'Thu': {}, 'Fri': {}}
+    timetables = []
     for day in day_list:
         for i in range(1, 6):
             if request.form.get(day + str(i)):
-                sub[day][i] = request.form.get(day + str(i)).replace('|', '\n')
-    file_path = 'json/' + request.form.get('grade') + '/' + request.form.get('class') + '.json'
-    with codecs.open(file_path, 'w', 'utf-8') as f:
-        json.dump(sub, f, indent=2, ensure_ascii=False)
-    return sub
+                append_data = Timetable()
+                append_data.grade = request.form.get('grade')
+                append_data.course = request.form.get('class')
+                append_data.day = day
+                append_data.time = i
+                append_data.subject = request.form.get(day + str(i))
+                timetables.append(append_data)
+    for timetable in timetables:
+        old_timetables = Timetable.query.filter_by(
+            grade=timetable.grade,
+            course=timetable.course
+        ).all()
+        for old_timetable in old_timetables:
+            db.session.delete(old_timetable)
+            db.session.commit()
+    for timetable in timetables:
+        db.session.add(timetable)
+        db.session.commit()
+    return 'OK'
 
 
 @handler.add(MessageEvent, message=TextMessage)
