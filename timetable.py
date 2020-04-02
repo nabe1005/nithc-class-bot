@@ -28,6 +28,6 @@ def get_timetable(postback):
         day=postback[-3:]).order_by(app.Timetable.time).all()
     text = day_list[postback[-3:]] + 'の時間割です。\n\n'
     for timetable in timetables:
-        text += '【' + str(timetable.time) + '時間目】\n' + timetable.subject + '\n\n'
+        text += '【' + str(timetable.time) + '時間目】\n' + timetable.subject.replace('|', '\n') + '\n\n'
     text += '\n' + str(timetables[-1].time) + '時間授業です。'
     return text
